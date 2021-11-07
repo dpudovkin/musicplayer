@@ -1,0 +1,2 @@
+Воспроизведение document.querySelector('audio').pause()
+Наименование трека document.querySelector('h1').innerText
