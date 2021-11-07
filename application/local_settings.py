@@ -1,0 +1,6 @@
+database_engine = 'django.db.backends.postgresql_psycopg2'
+database_host = '127.0.0.1'
+database_name = 'musicplayer'
+database_user = 'postgres'
+database_password = 'password'
+database_port = '5433'
