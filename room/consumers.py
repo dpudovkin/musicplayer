@@ -21,8 +21,6 @@ class RoomConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'v2_%s' % self.room_name
-        self.scope["session"]["seed"] = random.randint(1, 1000)
-        self.scope["session"]["voted"] = False
         self.username = self.scope["user"].username
 
         async_to_sync(self.channel_layer.group_add)(
@@ -33,14 +31,15 @@ class RoomConsumer(WebsocketConsumer):
         self.accept()
 
         # connect user
-        RedisService.get_instance().connect_user(self.room_group_name,self.username)
+        RedisService.get_instance().connect_user(self.room_group_name, self.username)
 
         # update song
         songId = RedisService.get_instance().current_song_id(self.room_group_name)
         if songId is None:
-            songId = RepositoryService.get_instance().next_song_id()
-
-        self.audio_update(songId)
+            #songId = RepositoryService.get_instance().next_song_id()
+            self.room_start_new_song()
+        else:
+            self.audio_update(songId)
 
         # room connect user
         self.room_connect_user(self.username)
@@ -51,10 +50,14 @@ class RoomConsumer(WebsocketConsumer):
         # send disconnect messages to room
         RedisService.get_instance().disconnect_user(self.room_group_name, self.username)
 
+        self.room_disconnect_user(self.username)
+
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
         )
+
+
 
     # Receive message from WebSocket
     def receive(self, text_data=None, bytes_data=None):
@@ -64,9 +67,8 @@ class RoomConsumer(WebsocketConsumer):
         action = text_data_json.get('action')
 
         if action == 'vote':
-            if not self.scope["session"]["voted"]:
-                RedisService.get_instance().vote_next_song(self.room_group_name)
-                self.scope["session"]["voted"] = True
+            if not RedisService.get_instance().is_voted(self.room_group_name, self.username):
+                RedisService.get_instance().vote_next_song(self.room_group_name, self.username)
 
             if RedisService.get_instance().turn_next(self.room_group_name):
                 self.room_start_new_song()
@@ -80,7 +82,6 @@ class RoomConsumer(WebsocketConsumer):
             {
                 'type': 'room_message',
                 'message': message,
-                'seed': self.scope["session"]["seed"],
                 'action': action
             })
 
@@ -96,32 +97,20 @@ class RoomConsumer(WebsocketConsumer):
     # Receive message from room group
     def room_message(self, event):
         message = event.get('message')
-        seed = event.get('seed')
         action = event.get('action')
 
         # new song action
         if action == RoomConsumer.actionNewSong:
 
-            self.scope["session"]["voted"] = False
+            RedisService.get_instance().reset_vote(self.room_group_name, self.room_name)
             songId = RedisService.get_instance().current_song_id(self.room_group_name)
 
             self.audio_update(songId)
-        elif action == RoomConsumer.actionUserConnect:
+        elif action == RoomConsumer.actionUserConnect or action == RoomConsumer.actionUserDisconnect:
             username = event.get('username')
 
             self.send(text_data=json.dumps({
                 'message': message,
-                'seed': seed,
-                'action': action,
-                'username': username,
-                'users': RedisService.get_instance().all_users(self.room_group_name)
-            }))
-        elif action == RoomConsumer.actionUserDisconnect:
-            username = event.get('username')
-
-            self.send(text_data=json.dumps({
-                'message': message,
-                'seed': seed,
                 'action': action,
                 'username': username,
                 'users': RedisService.get_instance().all_users(self.room_group_name)
@@ -129,14 +118,12 @@ class RoomConsumer(WebsocketConsumer):
         elif action == RoomConsumer.actionVoteUpdate:
             self.send(text_data=json.dumps({
                 'message': message,
-                'seed': seed,
                 'action': action,
                 'vote_count': RedisService.get_instance().vote_count(self.room_group_name)
             }))
         else:
             self.send(text_data=json.dumps({
                 'message': message,
-                'seed': seed,
                 'action': action
             }))
 
@@ -149,7 +136,6 @@ class RoomConsumer(WebsocketConsumer):
             {
                 'type': 'room_message',
                 'message': '',
-                'seed': self.scope["session"]["seed"],
                 'action': RoomConsumer.actionNewSong
             })
 
@@ -159,10 +145,20 @@ class RoomConsumer(WebsocketConsumer):
             {
                 'type': 'room_message',
                 'message': '',
-                'seed': self.scope["session"]["seed"],
                 'action': RoomConsumer.actionUserConnect,
                 'username': username
             })
+
+    def room_disconnect_user(self, username):
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'room_message',
+                'message': '',
+                'action': RoomConsumer.actionUserConnect,
+                'username': username
+            })
+
 
     def room_vote_update(self):
         async_to_sync(self.channel_layer.group_send)(
@@ -170,7 +166,5 @@ class RoomConsumer(WebsocketConsumer):
             {
                 'type': 'room_message',
                 'message': '',
-                'seed': self.scope["session"]["seed"],
                 'action': RoomConsumer.actionVoteUpdate,
             })
-

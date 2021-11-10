@@ -1,10 +1,10 @@
 import json
 
 from asgiref.sync import async_to_sync
-from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
 
 from chat.models import ChatMessage
+from user.models import User
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -12,7 +12,10 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'd2_%s' % self.room_name
-        self.username = self.scope["user"].username
+        self.user = self.scope["user"]
+        if not self.user.is_authenticated:
+            self.user = User.objects.get_anonymus_user()
+        self.username = self.user.username
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
@@ -31,7 +34,8 @@ class ChatConsumer(WebsocketConsumer):
     # @database_sync_to_async
     def new_message(self, message):
         msg = ChatMessage(message=message, room_name=self.room_name)
-        msg.user = self.scope['user']
+        msg.user = self.user
+
         msg.save()
 
     def receive(self, text_data=None, bytes_data=None):

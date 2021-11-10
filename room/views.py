@@ -1,20 +1,21 @@
 # Create your views here.
 # imported our models
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render
+from django.urls import reverse
 
 from chat.models import ChatMessage
 from chat.service import ChatMessageRepository
 from .models import Song
 
 
+@login_required(login_url=('/accounts/login'))
 def room(request, room_name):
-
     # load songs
     paginator = Paginator(Song.objects.all(), 1)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
 
     # load chat messages
     chat_queryset = ChatMessageRepository.get_instance().messages_by_room(room_name).order_by("-created")[:20]
@@ -39,4 +40,3 @@ def room(request, room_name):
                }
 
     return render(request, 'room.html', context)
-

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'room',
     'chat',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,5 @@ CHANNEL_LAYERS = {
 }
 
 mimetypes.add_type("text/css", ".css", True)
+
+AUTH_USER_MODEL="user.User"
