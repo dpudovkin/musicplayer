@@ -1,0 +1,90 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+<div class="container">
+
+  <div class="toppane">Test Page</div>
+
+  <div class="leftpane">
+    <h1>Song text</h1>
+     <div  id="songText" style="width:100%;">
+     </div>
+
+
+  </div>
+
+
+  <div class="middlepane">
+
+      <h1>Audio player</h1>
+    {% for item in page_obj %}
+    <audio controls id="customAudio" style="width:100%;">
+        <source src="{% if item.audio_file %}{{item.audio_file.url}} {% else %} {{item.audio_link}} {% endif %}"
+                type="audio/mp3">
+    </audio>
+    {% endfor %}
+
+      <button id="playButton">
+          Play
+      </button>
+
+      <button id="pauseButton">
+          Pause
+      </button>
+
+      <button id="nextButton">
+          Next
+      </button>
+
+      <div>
+          <b id="connected">
+
+          </b>
+          <b id="voted">
+
+          </b>
+      </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    </script>
+  </div>
+
+
+
+  <div class="rightpane">
+      <h1>Chat One</h1>
+        <input id="messageInput" type="text"m><br>
+        <input id="sendMsg" type="button" value="Send">
+        <div id="chat">
+
+            {% for item in chat_messages %}
+                <div><b>{{ item.user.username}}</b> </div>
+                <div>{{item.message}}</div>
+            {% endfor %}
+
+        </div>
+  </div>
+
+</div>
+
+    <script src="{% static 'socket_chat.js' %}">
+    </script>
+    <script src="{% static 'socket_player.js' %}">
+    </script>
+{{ room_name|json_script:"room-name" }}
+{% endblock content %}
+
+
+<!--    <script src="{% static './script.js' %}">-->
+<!--    </script>-->
+
+
+
+<!--<script src="{% static './interval_script.js' %}">-->
+<!--</script>-->
+
+
+

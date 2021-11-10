@@ -9,7 +9,7 @@ from chat.views import chat
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('rooms/', include("player.urls")),
+    path('rooms/', include("room.urls")),
     path('', index),
     path('chat/', chat)
 
