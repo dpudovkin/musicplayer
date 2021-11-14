@@ -1,0 +1,26 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+{% load bootstrap4 %}
+<!--style="background-color: white;"-->
+      <form method="post" enctype="multipart/form-data" style="background-color: white; padding:16px; height:70%; width: 40%">
+               {% csrf_token %}
+                {% for field in song_form %}
+                    <div class="fieldWrapper">
+                        {{ field.errors }}
+                        {{ field.label_tag }} {{ field }}
+                        {% if field.help_text %}
+                        <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button class="btn btn-primary my-4" type="submit">Добавить трек</button
+      </form>
+
+    <div style="padding: 16px; width: 40%;">
+
+    </div>
+
+{% endblock content %}

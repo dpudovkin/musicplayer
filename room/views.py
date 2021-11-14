@@ -1,12 +1,14 @@
 # Create your views here.
 # imported our models
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from chat.models import ChatMessage
 from chat.service import ChatMessageRepository
+from .forms import SongForm
 from .models import Song
 
 
@@ -40,3 +42,28 @@ def room(request, room_name):
                }
 
     return render(request, 'room.html', context)
+
+
+@login_required(login_url=('/accounts/login'))
+def index(request):
+    context = {}
+    return render(request, 'index.html', context)
+
+
+def to_room(request):
+    context={}
+    return redirect(f"/rooms/{request.POST.get('room_name')}")
+
+
+def add_song(request):
+    if request.method == "POST":
+        song_form = SongForm(request.POST, request.FILES)
+        if song_form.is_valid():
+            song_form.save()
+            messages.success(request, ('Your song was successfully added!'))
+        else:
+            messages.error(request, 'Error saving form')
+        #return redirect("room:index")
+    song_form = SongForm()
+    songs = Song.objects.all()[:20]
+    return render(request=request, template_name="songs.html", context={'song_form': song_form, 'songs': songs})

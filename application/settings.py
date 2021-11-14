@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts.apps.AccountsConfig',
     'room',
     'chat',
     'user',
+    "bootstrap4",
 ]
 
 MIDDLEWARE = [

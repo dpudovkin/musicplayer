@@ -4,7 +4,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
 
 from chat.models import ChatMessage
-from user.models import User
+from user.models import User, get_anonymus_user
 
 
 class ChatConsumer(WebsocketConsumer):
@@ -14,7 +14,7 @@ class ChatConsumer(WebsocketConsumer):
         self.room_group_name = 'd2_%s' % self.room_name
         self.user = self.scope["user"]
         if not self.user.is_authenticated:
-            self.user = User.objects.get_anonymus_user()
+            self.user = get_anonymus_user()
         self.username = self.user.username
 
         async_to_sync(self.channel_layer.group_add)(

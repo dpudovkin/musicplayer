@@ -11,8 +11,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('rooms/', include("room.urls")),
     path('', index),
-    path('chat/', chat)
-
+    path('chat/', chat),
+    path('users/', include("user.urls"))
 ]
 
 urlpatterns += [

@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>New index html</h1>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+{% load bootstrap4 %}
+
+<div class="center-child" style="vertical-align: middle;">
+    <form action="/rooms/to/room/" method="post">
+        {% csrf_token %}
+        <input type="text" name="room_name" placeholder="Имя комнаты" style="font-size: 32px;"><br>
+        <input type="submit" value="GO TO ROOM" style="margin: 0 auto; width: 100%;">
+    </form>
+</div>
+
+
+{% endblock content %}

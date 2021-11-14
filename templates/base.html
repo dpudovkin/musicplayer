@@ -1,17 +1,48 @@
 {% load static %}
+{% load bootstrap4 %}
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>My Project</title>
         <link rel="stylesheet" type="text/css" href='{% static "/css/base_style.css" %}'>
         <link rel="stylesheet" type="text/css" href='{% static "/css/styles.css" %}'>
+        <link rel="stylesheet" type="text/css" href='{% static "/font/stylesheet.css" %}'>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     </head>
 
-    <h1>
-        Base html example
-    </h1>
-
-    <body>
-    {% block content %}{% endblock content %}
+    <body style="background-color: #101010;">
+    {% if request.user.is_authenticated %}
+    <header class="header">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container">
+                <button type="button" class="btn btn-dark"
+                        onclick="location.href='{% url 'logout' %}'">Выйти из аккаунта</button>
+                <button type="button" class="btn btn-primary"
+                    onclick="location.href='{% url 'user:user_info'%}'">Мой аккаунт</button>
+                <button type="button" class="btn btn-light"
+                        onclick="location.href='{% url 'room:index' %}'">Выбор комнаты</button>
+                <button type="button" class="btn btn-success"
+                         onclick="location.href='{% url 'room:add_song' %}'">Добавить трек</button>
+            </div>
+        </nav>
+    </header>
+    {% else %}
+    <header class="header">
+        <nav class="navbar navbar-inverse" role="navigation">
+                    <div class="container">
+              <button type="button" class="btn btn-info"
+                onclick="location.href='{% url 'user:signup' %}'">Регистрация</button>
+            <button type="button" class="btn btn-info"
+                onclick="location.href='{% url 'login' %}'">Авторизация</button>
+            {% endif %}
+            </div>
+        </nav>
+    </header>
+    <div class="base-container">
+    {% block content %}
+    {% endblock content %}
+    </div>
     </body>
 </html>

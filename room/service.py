@@ -99,7 +99,11 @@ class RedisService:
 
     def is_voted(self, room_group_name, username):
         key = f"vote{room_group_name}{username}"
-        return 1 == self.redisClient.get(key)
+        voted = self.redisClient.get(key)
+        if voted is None:
+            return False
+        else:
+            return 1 == int(self.redisClient.get(key))
 
     def reset_vote(self, room_group_name, username):
         key = f"vote{room_group_name}{username}"

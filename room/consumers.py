@@ -43,6 +43,7 @@ class RoomConsumer(WebsocketConsumer):
 
         # room connect user
         self.room_connect_user(self.username)
+        self.room_vote_update()
 
     def disconnect(self, close_code):
         # Leave room group
@@ -92,6 +93,8 @@ class RoomConsumer(WebsocketConsumer):
             'action': 'audio_update',
             'src': song.audio_file.url,
             'text': song.text,
+            'img': song.image.url,
+            'title': song.title
         }))
 
     # Receive message from room group
@@ -101,7 +104,6 @@ class RoomConsumer(WebsocketConsumer):
 
         # new song action
         if action == RoomConsumer.actionNewSong:
-
             RedisService.get_instance().reset_vote(self.room_group_name, self.room_name)
             songId = RedisService.get_instance().current_song_id(self.room_group_name)
 
