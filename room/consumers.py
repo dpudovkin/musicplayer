@@ -8,6 +8,7 @@ from channels.db import database_sync_to_async
 from channels.generic.websocket import WebsocketConsumer
 
 from chat.models import ChatMessage
+from room.models import Like
 from room.service import RedisService, RepositoryService
 
 
@@ -17,6 +18,8 @@ class RoomConsumer(WebsocketConsumer):
     actionUserDisconnect = 'user_disconnect'
     actionVoteUpdate = 'vote_update'
     actionNewMessage = 'new_msg'
+    actionLike = 'like'
+    actionUnlike = 'unlike'
 
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -65,6 +68,19 @@ class RoomConsumer(WebsocketConsumer):
         message = text_data_json.get('message')
         action = text_data_json.get('action')
 
+        if action == RoomConsumer.actionLike:
+            song_id = RedisService.get_instance().current_song_id(self.room_group_name)
+            toLike = Like.objects.like(user_id=self.scope["user"].id, song_id=song_id)
+            if toLike:
+                self.send(text_data=json.dumps({
+                    'action': RoomConsumer.actionLike,
+                }))
+            else:
+                self.send(text_data=json.dumps({
+                    'action': RoomConsumer.actionUnlike,
+                }))
+            return
+
         if action == 'vote':
             if not RedisService.get_instance().is_voted(self.room_group_name, self.username):
                 RedisService.get_instance().vote_next_song(self.room_group_name, self.username)
@@ -87,6 +103,7 @@ class RoomConsumer(WebsocketConsumer):
     def audio_update(self, songId):
         song = RepositoryService.get_instance().song(songId)
         text = song.text
+        self.like_sync(songId)
         if len(str(song.textHTML)) != 0:
             text = song.textHTML
         self.send(text_data=json.dumps({
@@ -98,6 +115,17 @@ class RoomConsumer(WebsocketConsumer):
             'title': song.title,
             'artist': song.artist,
         }))
+
+    def like_sync(self, songId):
+        liked = Like.objects.is_liked(user_id=self.scope["user"].id, song_id=songId)
+        if liked:
+            self.send(text_data=json.dumps({
+                'action': RoomConsumer.actionLike,
+            }))
+        else:
+            self.send(text_data=json.dumps({
+                'action': RoomConsumer.actionUnlike,
+            }))
 
     # Receive message from room group
     def room_message(self, event):

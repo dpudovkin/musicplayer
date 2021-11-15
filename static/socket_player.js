@@ -8,6 +8,9 @@ $(document).ready(function(){
         const voteUpdateCommand = 'vote_update';
         const actionHeader = 'action'
 
+        const likeCommand = 'like'
+        const unlikeCommand = 'unlike'
+
 
         const connectedCount = document.querySelector('#connected')
         const votedCount = document.querySelector('#voted')
@@ -28,6 +31,7 @@ $(document).ready(function(){
         const pauseBtn = document.querySelector('#pauseButton');
         const nextBtn = document.querySelector('#nextButton');
         const audio =  document.querySelector('audio')
+        const likeBtn = document.querySelector('#like-button')
         const songText = document.querySelector('#songText')
 
         roomSocket.onmessage = function(e) {
@@ -60,6 +64,20 @@ $(document).ready(function(){
                 audioTitle.innerHTML =  data.title+" - "+data.artist
 
             }
+
+
+            if (msg.toLowerCase()==likeCommand){
+                console.log('Like')
+                likeBtn.className = "btn btn-danger";
+                likeBtn.innerHTML="Unlike"
+            }
+
+            if (msg.toLowerCase()==unlikeCommand){
+                console.log('UnLike')
+                likeBtn.className = "btn btn-light";
+                likeBtn.innerHTML="Like"
+            }
+
 
             if (msg.toLowerCase()==userConnectCommand || msg.toLowerCase()==userDisconnectCommand){
                 var avatars = new Array('/media/cat1.png', '/media/cat2.png', '/media/cat3.png');
@@ -104,6 +122,12 @@ $(document).ready(function(){
         nextBtn.addEventListener("click", () => {
             roomSocket.send(JSON.stringify({
                 'action': nextVoteCommand
+            }));
+        });
+
+        likeBtn.addEventListener("click", () => {
+            roomSocket.send(JSON.stringify({
+                'action': likeCommand
             }));
         });
 })

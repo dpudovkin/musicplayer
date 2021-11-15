@@ -4,12 +4,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
-from django.urls import reverse
 
 from chat.models import ChatMessage
 from chat.service import ChatMessageRepository
 from .forms import SongForm
-from .models import Song
+from .models import Song, Like
 
 
 @login_required(login_url=('/accounts/login'))
@@ -51,7 +50,7 @@ def index(request):
 
 
 def to_room(request):
-    context={}
+    context = {}
     return redirect(f"/rooms/{request.POST.get('room_name')}")
 
 
@@ -60,10 +59,17 @@ def add_song(request):
         song_form = SongForm(request.POST, request.FILES)
         if song_form.is_valid():
             song_form.save()
-            messages.success(request, ('Your song was successfully added!'))
+            messages.success(request, 'Your song was successfully added!')
         else:
             messages.error(request, 'Error saving form')
-        #return redirect("room:index")
     song_form = SongForm()
     songs = Song.objects.all()[:20]
     return render(request=request, template_name="songs.html", context={'song_form': song_form, 'songs': songs})
+
+
+def liked_song(request):
+    likes = Like.objects.liked_by_user(request.user.id)
+    songs = []
+    for like in likes:
+        songs.append(like.song)
+    return render(request=request, template_name='liked_songs.html', context={'liked_songs': songs})

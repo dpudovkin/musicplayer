@@ -21,6 +21,9 @@
                         onclick="location.href='{% url 'logout' %}'">Выйти из аккаунта</button>
                 <button type="button" class="btn btn-light"
                         onclick="location.href='{% url 'room:index' %}'">Выбор комнаты</button>
+                <button type="button" class="btn btn-danger"
+                onclick="location.href='{% url 'room:liked_song' %}'">Любимые треки</button>
+
                 <button type="button" class="btn btn-success"
                          onclick="location.href='{% url 'room:add_song' %}'">Добавить трек</button>
             </div>

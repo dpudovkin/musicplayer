@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
+import datetime
+
 
 # Create your models here.
 
@@ -22,3 +25,33 @@ class Song(models.Model):
         ordering = ('title',)
 
 
+class LikeManager(models.Manager):
+
+    def like(self, user_id, song_id):
+        try:
+            likeInstance = self.all().get(user_id=user_id, song_id=song_id)
+        except Like.DoesNotExist:
+            likeInstance = Like(user_id=user_id, song_id=song_id, created_at=datetime.datetime.now())
+            likeInstance.save()
+            return True
+        else:
+            likeInstance.delete()
+            return False
+
+    def is_liked(self, user_id, song_id):
+        try:
+            likeInstance = self.all().get(user_id=user_id, song_id=song_id)
+        except Like.DoesNotExist:
+            return False
+        else:
+            return True
+
+    def liked_by_user(self, user_id):
+        return self.all().filter(user_id=user_id)
+
+
+class Like(models.Model):
+    objects = LikeManager()
+    user = models.ForeignKey(to=User, verbose_name="Пользователь", null="False", on_delete=models.SET_NULL)
+    created_at = models.TimeField(verbose_name="Дата создания", null=True)
+    song = models.ForeignKey(to=Song, verbose_name="Аудитрек", null=True, on_delete=models.SET_NULL)
