@@ -14,6 +14,11 @@ const webSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/'+ ro
             chat.innerHTML += '<div class="msg">' + data.text + '</div>'
     };
 
+    webSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+            alert("Chat socket closed unexpectedly. Try to reload page!");
+    };
+
     btnSubmit.addEventListener("click", () => {
             message = input.value;
             webSocket.send(JSON.stringify({

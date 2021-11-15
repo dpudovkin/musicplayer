@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>My Project</title>
+        <title>Music together</title>
         <link rel="stylesheet" type="text/css" href='{% static "/css/base_style.css" %}'>
         <link rel="stylesheet" type="text/css" href='{% static "/css/styles.css" %}'>
         <link rel="stylesheet" type="text/css" href='{% static "/font/stylesheet.css" %}'>
@@ -19,8 +19,6 @@
             <div class="container">
                 <button type="button" class="btn btn-dark"
                         onclick="location.href='{% url 'logout' %}'">Выйти из аккаунта</button>
-                <button type="button" class="btn btn-primary"
-                    onclick="location.href='{% url 'user:user_info'%}'">Мой аккаунт</button>
                 <button type="button" class="btn btn-light"
                         onclick="location.href='{% url 'room:index' %}'">Выбор комнаты</button>
                 <button type="button" class="btn btn-success"

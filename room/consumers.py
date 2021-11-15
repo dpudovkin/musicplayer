@@ -36,7 +36,7 @@ class RoomConsumer(WebsocketConsumer):
         # update song
         songId = RedisService.get_instance().current_song_id(self.room_group_name)
         if songId is None:
-            #songId = RepositoryService.get_instance().next_song_id()
+            # songId = RepositoryService.get_instance().next_song_id()
             self.room_start_new_song()
         else:
             self.audio_update(songId)
@@ -57,8 +57,6 @@ class RoomConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-
-
 
     # Receive message from WebSocket
     def receive(self, text_data=None, bytes_data=None):
@@ -88,13 +86,17 @@ class RoomConsumer(WebsocketConsumer):
 
     def audio_update(self, songId):
         song = RepositoryService.get_instance().song(songId)
+        text = song.text
+        if len(str(song.textHTML)) != 0:
+            text = song.textHTML
         self.send(text_data=json.dumps({
             'message': '',
             'action': 'audio_update',
             'src': song.audio_file.url,
-            'text': song.text,
+            'text': text,
             'img': song.image.url,
-            'title': song.title
+            'title': song.title,
+            'artist': song.artist,
         }))
 
     # Receive message from room group
@@ -104,7 +106,7 @@ class RoomConsumer(WebsocketConsumer):
 
         # new song action
         if action == RoomConsumer.actionNewSong:
-            RedisService.get_instance().reset_vote(self.room_group_name, self.room_name)
+            RedisService.get_instance().reset_vote(self.room_group_name, self.username)
             songId = RedisService.get_instance().current_song_id(self.room_group_name)
 
             self.audio_update(songId)
@@ -160,7 +162,6 @@ class RoomConsumer(WebsocketConsumer):
                 'action': RoomConsumer.actionUserConnect,
                 'username': username
             })
-
 
     def room_vote_update(self):
         async_to_sync(self.channel_layer.group_send)(

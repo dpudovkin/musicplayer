@@ -152,5 +152,3 @@ CHANNEL_LAYERS = {
 }
 
 mimetypes.add_type("text/css", ".css", True)
-
-AUTH_USER_MODEL="user.User"

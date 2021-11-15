@@ -4,8 +4,9 @@
 {% block content %}
 {% load static %}
 {% load bootstrap4 %}
+<div class="center-div" style="color: white;" >
 <!--style="background-color: white;"-->
-      <form method="post" enctype="multipart/form-data" style="background-color: white; padding:16px; height:70%; width: 40%">
+      <form method="post" enctype="multipart/form-data" style="padding:16px; height:70%; width: 40%">
                {% csrf_token %}
                 {% for field in song_form %}
                     <div class="fieldWrapper">
@@ -18,9 +19,9 @@
                 {% endfor %}
                 <button class="btn btn-primary my-4" type="submit">Добавить трек</button
       </form>
-
     <div style="padding: 16px; width: 40%;">
 
     </div>
+</div>
 
 {% endblock content %}

@@ -30,11 +30,16 @@
   </div>
   <div class="middlepane">
 
-      <div id="audio-image-section" style="margin: 32px" >
+      <div id="audio-image-section" style="margin-top:16px; margin-bottom:8px" >
           <center>
-          <img id="audio-image" src="" style="width:200px;height:200px;">
+          <img id="audio-image" src="" style="width:300px;height:300px; box-shadow: 0 0 60px 5px rgba(0, 0, 0, 0.4);">
               </center>
       </div>
+
+      <div style="margin: 0px auto; width: fit-content;">
+         <p id="song-title" style="font-size: 32px; color:white;"></p>
+     </div>
+
      <div id="audio-player-section" style="display: flex; justify-content: center; align-items: center; margin: 16px">
     {% for item in page_obj %}
     <audio controls id="customAudio" style="width:70%;">
@@ -48,7 +53,6 @@
       <button type="submit" class="btn btn-light" id="playButton" style="margin: 8px">
           Play
       </button>
-
       <button type="submit" class="btn btn-light" id="pauseButton" style="margin: 8px">
           Pause
       </button>
@@ -68,7 +72,7 @@
 
       <div style="margin: 0 auto; width: fit-content;">
       <button type="submit" class="btn btn-primary" id="nextButton" style="margin: 8px; font-size: 32px;">
-          Next
+          next
       </button>
     </div>
 
@@ -84,7 +88,7 @@
                 <div>{{item.message}}</div>
             {% endfor %}
         </div>
-      <div class="chataction" style="align-self: flex-end;">
+      <div class="chataction" style="align-self: flex-end; width:90%">
             <input id="messageInput" type="text" style="width:100%;"><br>
             <input id="sendMsg" type="button" value="Send" style="width:100%;">
       </div>

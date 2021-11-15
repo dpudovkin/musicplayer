@@ -52,14 +52,14 @@ body, html {
   background-color: #222222;
   border-collapse: collapse;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 
 }
 
 .scrollpane{
   position: relative;
   overflow-y: scroll;
-  height: 80%;
+  height: 90%;
   margin: 16px;
   color: white;
 }
