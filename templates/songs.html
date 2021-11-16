@@ -4,9 +4,10 @@
 {% block content %}
 {% load static %}
 {% load bootstrap4 %}
-<div class="center-div" style="color: white;" >
+<div style="color: white; width:80%; margin: 0 auto" >
 <!--style="background-color: white;"-->
-      <form method="post" enctype="multipart/form-data" style="padding:16px; height:70%; width: 40%">
+    <div style="width: 30%; float: left;">
+      <form method="post" enctype="multipart/form-data" style="padding:16px;width: 100%;">
                {% csrf_token %}
                 {% for field in song_form %}
                     <div class="fieldWrapper">
@@ -17,11 +18,29 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                <button class="btn btn-primary my-4" type="submit">Добавить трек</button
+                <button class="btn btn-primary my-4" type="submit">Добавить трек</button>
       </form>
-    <div style="padding: 16px; width: 40%;">
+        </div>
 
+    <div style="color: white; width:65%; display:inline-block; margin-left: 5%">
+    <h3 style="margin-bottom: 16px;">Недавно добавленные</h3>
+            {% for song in songs %}
+            <div style="margin: 8px">
+                <div style="width: 40%; margin: 0">
+                  <img src="{{ song.image.url }}" style="width: 60px; margin-bottom: 4px;">
+                     <h4>{{ song.title }} - {{ song.artist }}</h4>
+                </div>
+                    <audio controls id="customAudio" style="width:100%;">
+                        <source src="{{ song.audio_file.url }}" type="audio/mp3">
+                    </audio>
+            </div>
+            {% endfor %}
     </div>
+
+
 </div>
+
+
+
 
 {% endblock content %}

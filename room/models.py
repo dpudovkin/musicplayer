@@ -5,14 +5,21 @@ import datetime
 
 # Create your models here.
 
+class SongManager(models.Manager):
+
+    def recently_added(self):
+        return self.all().order_by('-created')[:10]
+
 
 class Song(models.Model):
+    objects = SongManager()
     title = models.CharField(max_length=90, null=False, verbose_name='Наименование трека')
     artist = models.CharField(max_length=90, null=False, verbose_name='Исполнитель')
     image = models.ImageField(verbose_name='Обложка трека')
     audio_file = models.FileField(blank=True, null=True)
     text = models.TextField(max_length=50000, null=True, verbose_name='Текст песни')
     textHTML = models.TextField(max_length=10000, null=True, verbose_name='Текст песни с HTML тэгами')
+    created = models.TimeField(auto_now_add=True)
     paginate_by = 2
 
     def __str__(self):
