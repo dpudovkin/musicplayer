@@ -3,14 +3,32 @@
 {% block content %}
 {% load static %}
 {% load bootstrap4 %}
+<div class="row" style="height: 100%;" >
+    <div class="col-3"></div>
+    <div class="col-6 my-auto" style="height: 50%">
+        <div class="row"  style="height: 30%">
+            <div class="col pr-4" style="height: 100%" align="center">
+            <img style="height: 100%"
+                src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/8c9d6265117447.5afb222ee6a38.gif" />
+            </div>
+        </div>
+            <form action="/rooms/to/room/" method="post">
+                {% csrf_token %}
+                <div class="my-2">
+                    <div class="form-group">
+                    <input type="text" name="room_name" placeholder="Наименование комнаты" id="roomNameInput"
+                           style="width: 100%;" class="form-control form-control-lg" >
+                    <small class="form-text text-muted">Все пользователи, узнавшие наименование комнаты получат к ней доступ</small>
 
-<div class="center-child" style="vertical-align: middle;">
-    <form action="/rooms/to/room/" method="post">
-        {% csrf_token %}
-        <input type="text" name="room_name" placeholder="Имя комнаты" style="font-size: 32px;"><br>
-        <input type="submit" value="GO TO ROOM" style="margin: 0 auto; width: 100%;">
-    </form>
+                    </div>
+
+                </div>
+                <div class="my-2" align="center">
+                <input type="submit" value="Войти" class="btn btn-primary" style="width: 80%; height: 60px">
+                </div>
+            </form>
+    </div>
+    <div class="col-3"></div>
 </div>
-
 
 {% endblock content %}

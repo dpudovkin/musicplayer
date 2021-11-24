@@ -1,12 +1,58 @@
 {% extends 'base.html' %}
  
 {% block content %}
-<div class="center-div" style="color: white">
-<h2>Sign up</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Sign up</button>
-</form>
+<div class="row">
+    <div class="col my-2"><h2 align="center">Регистрация</h2></div>
+</div>
+
+
+
+<div class="row" style="height: 50%;">
+    <div class="col-4"></div>
+    <div class="col-4 my-auto">
+        <form method="post">
+                {% csrf_token %}
+                <div class="m-1">
+                    <div class="form-group">
+                        <label for="id_username">Имя пользователя</label>
+                        <input type="text" class="form-control form-control-lg" name="username"
+                               placeholder="yourname" id="id_username" required>
+                     </div>
+                </div>
+
+                <div class="m-1">
+                    <div class="form-group">
+                        <label for="id_username">Адрес электронной почты</label>
+                        <input type="email" name="email" autocomplete="email"
+                                       class="form-control form-control-lg" placeholder="your@mail.ru"
+                                       id="inputEmail" required>
+                     </div>
+                </div>
+
+                <div class="m-1">
+                    <div class="form-group">
+                        <label for="id_password1">Придумайте пароль</label>
+                        <input type="password" class="form-control form-control-lg" name="password1"
+                               id="id_password1" required>
+                     </div>
+                </div>
+
+
+                <div class="m-1">
+                    <div class="form-group">
+                        <label for="id_password2">Повторите пароль</label>
+                        <input type="password" class="form-control form-control-lg" name="password2"
+                               id="id_password2" required>
+                     </div>
+                </div>
+
+
+                <div class="mt-4 mb-2" align="center">
+                    <input type="submit" value="Зарегистрироваться" class="btn btn-primary" style="width: 80%; height: 40px">
+                    <input type="hidden" name="next" value="{{ next }}"/>
+                </div>
+        </form>
+    </div>
+    <div class="col-4"></div>
 </div>
 {% endblock content %}

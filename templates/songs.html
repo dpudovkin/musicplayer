@@ -4,43 +4,108 @@
 {% block content %}
 {% load static %}
 {% load bootstrap4 %}
-<div style="color: white; width:80%; margin: 0 auto" >
-<!--style="background-color: white;"-->
-    <div style="width: 30%; float: left;">
-      <form method="post" enctype="multipart/form-data" style="padding:16px;width: 100%;">
-               {% csrf_token %}
-                {% for field in song_form %}
-                    <div class="fieldWrapper">
-                        {{ field.errors }}
-                        {{ field.label_tag }} {{ field }}
-                        {% if field.help_text %}
-                        <p class="help">{{ field.help_text|safe }}</p>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                <button class="btn btn-primary my-4" type="submit">Добавить трек</button>
-      </form>
-        </div>
 
-    <div style="color: white; width:65%; display:inline-block; margin-left: 5%">
-    <h3 style="margin-bottom: 16px;">Недавно добавленные</h3>
+<div class="row mb-4">
+    <div class="col-6">
+        <div class="row">
+            <div class="col">
+                <h2 class="my-2" align=>Добавить трек</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+            <form method="post" enctype="multipart/form-data">
+                 {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_title">Наименование трека</label>
+                        <input type="text" name="title" class="form-control" required="" id="id_title">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_artist">Исполнитель:</label>
+                        <input type="text" name="artist" class="form-control" required="" id="id_artist">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_image">Обложка трека:</label>
+                        <input class="form-control" type="file" name="image" accept="image/*" required="" id="id_image">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_audio_file">Аудио файл:</label>
+                        <input class="form-control"  type="file" name="audio_file" required="" accept="audio/*"
+                        id="id_audio_file">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_text">Текст песни:</label>
+                        <textarea name="text"  rows="6" class="form-control"
+                                  maxlength="50000" required="" id="id_text"></textarea>
+                        <small class="form-text text-muted">
+                            Добавьте текст песни в оригинале</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_textHTML">Текст песни с HTML тэгами:</label>
+                        <textarea name="textHTML" rows="6"  maxlength="10000"
+                                  class="form-control" id="id_textHTML"></textarea>
+                        <small class="form-text text-muted">
+                            Будет круто если вы добавите текст песни с HTML разметкой</small>
+                    </div>
+                <button class="btn btn-primary my-2" type="submit">Отправить</button>
+        </form>
+        </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="row">
+            <div class="col my-2">
+                <h2 align=>Недавно добавленные</h2>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col">
+        <div class="list-group">
             {% for song in songs %}
-            <div style="margin: 8px">
-                <div style="width: 40%; margin: 0">
-                  <img src="{{ song.image.url }}" style="width: 60px; margin-bottom: 4px;">
-                     <h4>{{ song.title }} - {{ song.artist }}</h4>
+            <div class="list-group-item">
+            <div class="row">
+                <div class="col-2 my-2" align="center">
+                  <img src="{{ song.image.url }}"
+                       style="width: 60px; border-radius: 10px;">
                 </div>
+                <div class="col-3 my-auto">
+                     <h3>{{ song.title }}</h3>
+                    <h5 class="text-secondary">{{ song.artist }}</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <audio controls id="customAudio" style="width:100%;">
                         <source src="{{ song.audio_file.url }}" type="audio/mp3">
                     </audio>
+                </div>
+            </div>
             </div>
             {% endfor %}
+        </div>
     </div>
-
-
+</div>
+    </div>
 </div>
 
-
-
+<!--        <form method="post" enctype="multipart/form-data" style="padding:16px;width: 100%;">-->
+<!--               {% csrf_token %}-->
+<!--                {% for field in song_form %}-->
+<!--                    <div class="fieldWrapper">-->
+<!--                        {{ field.errors }}-->
+<!--                        {{ field.label_tag }} {{ field }}-->
+<!--                        {% if field.help_text %}-->
+<!--                        <p class="help">{{ field.help_text|safe }}</p>-->
+<!--                        {% endif %}-->
+<!--                    </div>-->
+<!--                {% endfor %}-->
+<!--                <button class="btn btn-primary my-4" type="submit">Добавить трек</button>-->
+<!--        </form>-->
+</div>
 
 {% endblock content %}

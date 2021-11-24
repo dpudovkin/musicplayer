@@ -3,16 +3,8 @@ body, html {
   height: 100%;
   margin: 0;
   font-family: 'GT Eesti Pro Text';
-
 }
 
-.base-container{
-  border-collapse: collapse;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
 
 .center-child{
   display: flex;
@@ -20,10 +12,6 @@ body, html {
   justify-content: center;
 }
 
-.container {
-  width: 100%;
-  height: 100%;
-}
 
 .leftpane {
     width: 25%;
@@ -67,10 +55,6 @@ body, html {
 .chataction{
     height: 10%;
     margin: 0 auto;
-}
-
-.chatmessage{
-
 }
 
 #customAudio{

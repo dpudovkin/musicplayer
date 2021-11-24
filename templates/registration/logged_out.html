@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="center-div" style="color: white">
-<p>Logged out!</p>
-<a href="{% url 'login'%}">Click here to login again.</a>
+<div class="row" tyle="height: 50%;">
+        <div class="col my-auto" align="center">
+            <div class="row">
+                <div class="p-3 mb-2 bg-primary text-white col-12">
+                Logged out!
+                </div>
+                <a class="col-12" href="{% url 'login'%}">Click here to login again.</a>
+            </div>
+        </div>
 </div>
 {% endblock content %}

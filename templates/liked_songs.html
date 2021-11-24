@@ -5,21 +5,37 @@
 {% load static %}
 {% load bootstrap4 %}
 
+<div class="row">
+    <div class="col my-2"><h1 align="center">Любимые треки</h1></div>
+</div>
 
-<div style="color: white; width:80%;">
-    <h2 style="margin: 16px;">Треки которые вам понравились</h2>
+<div class="row">
+    <div class="col">
+        <div class="list-group">
             {% for song in liked_songs %}
-            <div style="">
-                <div style="width: 20%;">
-                  <img src="{{ song.image.url }}" style="width: 80px; margin-bottom: 8px;">
-                     <h4>{{ song.title }} - {{ song.artist }}</h4>
+            <div class="list-group-item">
+            <div class="row">
+                <div class="col-2 my-2" align="center">
+                  <img src="{{ song.image.url }}"
+                       style="width: 90px; border-radius: 10px;">
                 </div>
-                 <div>
-                    <audio controls id="customAudio" style="width:70%;">
+                <div class="col-3 my-auto">
+                     <h2>{{ song.title }}</h2>
+                    <h5 class="text-secondary">{{ song.artist }}</h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <audio controls id="customAudio" style="width:100%;">
                         <source src="{{ song.audio_file.url }}" type="audio/mp3">
                     </audio>
                 </div>
             </div>
+            </div>
             {% endfor %}
+        </div>
+    </div>
 </div>
+
 {% endblock content %}

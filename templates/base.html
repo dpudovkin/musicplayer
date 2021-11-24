@@ -11,39 +11,45 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     </head>
-
-    <body style="background-color: #101010;">
+    <body style="background-color: #ffffff">
+    <div class="container">
     {% if request.user.is_authenticated %}
-    <header class="header">
-        <nav class="navbar navbar-inverse" role="navigation">
-            <div class="container">
+        <div class="row my-2" style="height: 80px;">
+            <div class="col-2 my-auto" align="center">
+                <button type="button" class="btn btn-primary"
+                        onclick="location.href='{% url 'room:index' %}'">Выбор комнаты</button>
+            </div>
+            <div class="col-2 my-auto" align="center">
+                <button type="button" class="btn btn-danger"
+                        onclick="location.href='{% url 'room:liked_song' %}'">Любимые треки</button>
+            </div>
+            <div class="col-2 my-auto" align="center">
+                <button type="button" class="btn btn-success"
+                        onclick="location.href='{% url 'room:add_song' %}'">Добавить трек</button>
+            </div>
+            <div class="col-4 my-auto"></div>
+            <div class="col-2 my-auto" align="end">
                 <button type="button" class="btn btn-dark"
                         onclick="location.href='{% url 'logout' %}'">Выйти из аккаунта</button>
-                <button type="button" class="btn btn-light"
-                        onclick="location.href='{% url 'room:index' %}'">Выбор комнаты</button>
-                <button type="button" class="btn btn-danger"
-                onclick="location.href='{% url 'room:liked_song' %}'">Любимые треки</button>
-
-                <button type="button" class="btn btn-success"
-                         onclick="location.href='{% url 'room:add_song' %}'">Добавить трек</button>
             </div>
-        </nav>
-    </header>
+        </div>
     {% else %}
-    <header class="header">
-        <nav class="navbar navbar-inverse" role="navigation">
-                    <div class="container">
-              <button type="button" class="btn btn-info"
-                onclick="location.href='{% url 'user:signup' %}'">Регистрация</button>
-            <button type="button" class="btn btn-info"
-                onclick="location.href='{% url 'login' %}'">Авторизация</button>
-            {% endif %}
+        <div class="row my-2" style="height: 80px;">
+            <div class="col-6 my-auto" align="center">
+                <button type="button" class="btn btn-primary"
+                        onclick="location.href='{% url 'user:signup' %}'">Регистрация</button>
             </div>
-        </nav>
-    </header>
-    <div class="base-container">
-    {% block content %}
-    {% endblock content %}
+            <div class="col-6 my-auto" align="center">
+                <button type="button" class="btn btn-primary"
+                        onclick="location.href='{% url 'login' %}'">Авторизация</button>
+                {% endif %}
+            </div>
+        </div>
+
+    <div class="container" style="height: 100%">
+        {% block content %}
+        {% endblock content %}
+    </div>
     </div>
     </body>
 </html>
