@@ -10,8 +10,10 @@ $(document).ready(function(){
 const webSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/'+ roomName+'/');
     webSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            chat.innerHTML += '<div><b> ' + data.username + ' </b></div>'
-            chat.innerHTML += '<div class="msg">' + data.text + '</div>'
+//            chat.innerHTML += '<div><b> ' + data.username + ' </b></div>'
+//            chat.innerHTML += '<div class="msg">' + data.text + '</div>'
+            chat.innerHTML +='<div class="px-2"><small><b>' + data.username + '</b></small> </div>'
+            chat.innerHTML += '<div class="p-2 px-1 mb-2 bg-light text-dark" style="border-radius: 10px; display: inline-block;">'+data.text+'</div>'
     };
 
     webSocket.onclose = function(e) {

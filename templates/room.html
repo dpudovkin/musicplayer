@@ -6,18 +6,17 @@
 {% load bootstrap4 %}
 
 
-<div class="row mb-3" style="height: 10%" id="user-list">
+<div class="row mb-3" style="height: 10%">
     <div class="col" style="height: 100%">
     <div class="card" style="height: 100%;">
-       <div class="card-body">
+        <div class="row mx-3" id="user-list">
 
-    </div>
+        </div>
     </div>
     </div>
 </div>
 
 <div class="row" style="height: 90%">
-
    <div class="col-3" style="height: 100%">
        <div class="card" style="height: 100%; width:100%">
        <div class="card-body" style="overflow-y: scroll;">
@@ -29,7 +28,7 @@
    </div>
 
    <div class="col-6" style="height: 100%">
-       <div class="row" style="height: 50%">
+       <div class="row py-2" style="height: 75%">
 <!--           <div class="col">-->
                <div class="card" style="width:100%">
                <div class="card-body my-1" align="center" style="width:100%">
@@ -42,13 +41,13 @@
 
 
                {% for item in page_obj %}
-                <audio class="my-3" controls id="customAudio" style="width:90%;">
+                <audio class="my-2" controls id="customAudio" style="width:90%;">
                 <source src="{% if item.audio_file %}{{item.audio_file.url}} {% else %} {{item.audio_link}} {% endif %}"
                 type="audio/mp3">
                 </audio>
                 {% endfor %}
 
-                   <div class="row my-2" style="width:90%;">
+                   <div class="row my-1" style="width:90%;">
                    <div class="col-3" align="center">
                    <button type="submit" class="btn btn-dark" id="playButton"
                            style="width: 100%">Play</button>
@@ -68,26 +67,24 @@
 <!--           </div>-->
        </div>
 
-       <div class="row my-3">
+       <div class="row py-2" style="height: 25%">
            <div class="card" style="height: 100%; width:100%">
                <div class="card-body" align="center">
                    <div class="row my-2" style="width:90%;">
                     <div class="col" style="height:100%">
-
-                       <div class="row my-5">
+                       <div class="row my-1">
                            <div class="col">
                        <div class="progress" style="height:24pt">
-                      <div class="progress-bar" role="progressbar" aria-valuenow="90"
+                      <div id="vote-bar" class="progress-bar" role="progressbar" aria-valuenow="90"
                       aria-valuemin="0" aria-valuemax="100" style="width:80%; height:100%">
                           70%
                       </div>
                       </div>
                       </div>
                        </div>
-                      <div class="row my-2">
+                      <div class="row mt-2">
                       <div class="col">
-
-                       <button type="submit" class="btn btn-primary" style="width: 50%"
+                       <button type="submit" class="btn btn-primary" style="width: 25%"
                                id="nextButton"> NEXT </button>
                       </div>
                       </div>
@@ -100,110 +97,32 @@
 
     <div class="col-3" style="height: 100%">
        <div class="card" style="height: 100%; width:100%">
-       <div class="card-body" style="width:100%; overflow-y: scroll;">
-        <div id="chat" class="scrollpane" style="width:100%">
-            {% for item in chat_messages %}
-                <div><b>{{ item.user.username}}</b> </div>
-                <div>{{item.message}}</div>
-            {% endfor %}
-        </div>
-      <div class="chataction" style="align-self: flex-end; width:90%">
-            <input id="messageInput" type="text" style="width:100%;"><br>
-            <input id="sendMsg" type="button" value="Send" style="width:100%;">
-      </div>
-      </div>
+           <div class="card-body" style="height: 100%; width:100%;" >
+           <div class="row py-2" style="height: 85%; overflow-y: scroll;">
+            <div id="chat" style="width:100%;">
+                {% for item in chat_messages %}
+                <div class="px-2">
+                    <small><b> {{ item.user.username}} </b></small>
+                </div>
+                <div class="p-2 px-1 mb-2 bg-light text-dark" style="border-radius: 10px; display: inline-block;">
+                    {{item.message}}
+                </div>
+                 {% endfor %}
+            </div>
+            </div>
+            <div class="row py-3" style="height: 10%">
+                    <input id="messageInput" type="text" class="form-control"  style="width:100%;"><br>
+                    <input class="btn btn-primary" id="sendMsg" type="button" value="Send" style="width:100%;">
+            </div>
+           </div>
       </div>
    </div>
 
 
 </div>
 
-<!--<div class="container">-->
-
-<!--  <div id="user-list" class="toppane" style="clear:both">-->
-<!--    </div>-->
-<!--    <div style="width:100%; height:0px; clear:both;"></div>-->
-
-<!--  <div class="leftpane">-->
-<!--     <div  id="songText" style="width:100%; margin: 16px; color: white;">-->
-<!--     </div>-->
-<!--  </div>-->
-<!--  <div class="middlepane">-->
-
-<!--      <div id="audio-image-section" style="margin-top:16px; margin-bottom:8px" >-->
-<!--          <center>-->
-<!--          <img id="audio-image" src="" style="width:300px;height:300px; box-shadow: 0 0 60px 5px rgba(0, 0, 0, 0.4);">-->
-<!--              </center>-->
-<!--      </div>-->
-
-<!--      <div style="margin: 0px auto; width: fit-content;">-->
-<!--          <p id="song-title" style="font-size: 32px; color:white;"></p>-->
-<!--     </div>-->
-
-
-<!--    <div style="margin: 0 auto; width: fit-content;">-->
-
-<!--    </div>-->
-
-
-<!--     <div id="audio-player-section" style="display: flex; justify-content: center; align-items: center; margin: 16px">-->
-<!--    {% for item in page_obj %}-->
-<!--    <audio controls id="customAudio" style="width:70%;">-->
-<!--        <source src="{% if item.audio_file %}{{item.audio_file.url}} {% else %} {{item.audio_link}} {% endif %}"-->
-<!--                type="audio/mp3">-->
-<!--    </audio>-->
-<!--    {% endfor %}-->
-<!--     </div>-->
-
-<!--    <div style="margin: 0 auto; width: fit-content;">-->
-<!--      <button type="submit" class="btn btn-light" id="playButton" style="margin: 8px">-->
-<!--          Play-->
-<!--      </button>-->
-<!--        <button type="submit" class="btn btn-light" id="like-button" style="margin: 8px;">-->
-<!--          Like-->
-<!--           </button>-->
-<!--      <button type="submit" class="btn btn-light" id="pauseButton" style="margin: 8px">-->
-<!--          Pause-->
-<!--      </button>-->
-<!--    </div>-->
-
-<!--      <div style="margin: 16px">-->
-<!--      <div style="font-size: 48px; margin: 0 auto; width: fit-content;">-->
-<!--          <b id="connected" style="font-size: 48px;">-->
-<!--                0-->
-<!--          </b>-->
-<!--          <b>/</b>-->
-<!--          <b id="voted" style="font-size: 48px;">-->
-<!--                0-->
-<!--          </b>-->
-<!--      </div>-->
-<!--          </div>-->
-
-<!--      <div style="margin: 0 auto; width: fit-content;">-->
-<!--      <button type="submit" class="btn btn-primary" id="nextButton" style="margin: 8px; font-size: 32px;">-->
-<!--          next-->
-<!--      </button>-->
-<!--    </div>-->
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
     </script>
-<!--  </div>-->
-
-
-<!--  <div class="rightpane">-->
-<!--        <div id="chat" class="scrollpane" style="width:100%">-->
-<!--            {% for item in chat_messages %}-->
-<!--                <div><b>{{ item.user.username}}</b> </div>-->
-<!--                <div>{{item.message}}</div>-->
-<!--            {% endfor %}-->
-<!--        </div>-->
-<!--      <div class="chataction" style="align-self: flex-end; width:90%">-->
-<!--            <input id="messageInput" type="text" style="width:100%;"><br>-->
-<!--            <input id="sendMsg" type="button" value="Send" style="width:100%;">-->
-<!--      </div>-->
-<!--  </div>-->
-
-<!--</div>-->
     <script src="{% static 'socket_chat.js' %}">
     </script>
     <script src="{% static 'socket_player.js' %}">

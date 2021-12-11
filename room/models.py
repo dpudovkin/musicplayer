@@ -10,16 +10,21 @@ class SongManager(models.Manager):
     def recently_added(self):
         return self.all().order_by('-created')[:10]
 
+    def applied_recently_added(self, verified=True):
+        return self.all().order_by('-created').filter(verified=verified)[:10]
+
 
 class Song(models.Model):
     objects = SongManager()
     title = models.CharField(max_length=90, null=False, verbose_name='Наименование трека')
     artist = models.CharField(max_length=90, null=False, verbose_name='Исполнитель')
     image = models.ImageField(verbose_name='Обложка трека')
-    audio_file = models.FileField(blank=True, null=True)
+    audio_file = models.FileField(blank=True, null=True, verbose_name="Аудио файл")
     text = models.TextField(max_length=50000, null=True, verbose_name='Текст песни')
     textHTML = models.TextField(max_length=10000, null=True, verbose_name='Текст песни с HTML тэгами')
-    created = models.TimeField(auto_now_add=True)
+    created = models.TimeField(auto_now_add=True, verbose_name="Дата создания")
+    verified = models.BooleanField(default=False, verbose_name="Верицирован")
+    uploader = models.ForeignKey(to=User, verbose_name="Загружающее лицо", null=True, on_delete=models.SET_NULL)
     paginate_by = 2
 
     def __str__(self):
@@ -61,4 +66,4 @@ class Like(models.Model):
     objects = LikeManager()
     user = models.ForeignKey(to=User, verbose_name="Пользователь", null="False", on_delete=models.SET_NULL)
     created_at = models.TimeField(verbose_name="Дата создания", null=True)
-    song = models.ForeignKey(to=Song, verbose_name="Аудитрек", null=True, on_delete=models.SET_NULL)
+    song = models.ForeignKey(to=Song, verbose_name="Аудиотрек", null=True, on_delete=models.SET_NULL)

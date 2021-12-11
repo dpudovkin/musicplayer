@@ -13,7 +13,7 @@
     <body style="background-color: #ffffff">
     <div class="container">
     {% if request.user.is_authenticated %}
-        <div class="row my-2" style="height: 80px;">
+        <div class="row my-2" style="height: 50px;">
             <div class="col-2 my-auto" align="center">
                 <button type="button" class="btn btn-primary"
                         onclick="location.href='{% url 'room:index' %}'">Выбор комнаты</button>
@@ -33,7 +33,7 @@
             </div>
         </div>
     {% else %}
-        <div class="row my-2" style="height: 80px;">
+        <div class="row my-2" style="height: 50px;">
             <div class="col-6 my-auto" align="center">
                 <button type="button" class="btn btn-primary"
                         onclick="location.href='{% url 'user:signup' %}'">Регистрация</button>

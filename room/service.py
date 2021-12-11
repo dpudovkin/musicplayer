@@ -126,7 +126,8 @@ class RepositoryService:
         return cls.__instance
 
     def next_song_id(self):
-        return Song.objects.order_by('?')[0].id
+        # get only verified Song
+        return Song.objects.filter(verified=True).order_by('?')[0].id
 
     def song_url(self, song_id):
         song = Song.objects.get(id=song_id)

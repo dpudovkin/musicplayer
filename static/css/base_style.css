@@ -44,19 +44,6 @@ body, html {
 
 }
 
-.scrollpane{
-  position: relative;
-  overflow-y: scroll;
-  height: 90%;
-  margin: 16px;
-  color: white;
-}
-
-.chataction{
-    height: 10%;
-    margin: 0 auto;
-}
-
 #customAudio{
     width: 80%;
     margin: 0 auto;
@@ -68,9 +55,6 @@ body, html {
     justify-content: center;
     align-items: center;
 }
-
-
-
 
 .toppane {
   width: 100%;

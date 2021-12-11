@@ -12,8 +12,8 @@ $(document).ready(function(){
         const unlikeCommand = 'unlike'
 
 
-        const connectedCount = document.querySelector('#connected')
-        const votedCount = document.querySelector('#voted')
+//        const connectedCount = document.querySelector('#connected')
+//        const votedCount = document.querySelector('#voted')
 
         const audioImage = document.querySelector('#audio-image')
         const audioTitle = document.querySelector('#song-title')
@@ -27,12 +27,18 @@ $(document).ready(function(){
             + '/'
         );
 
+
+
+        var voted = 0;
+        var connected =0;
+
         const playBtn = document.querySelector('#playButton');
         const pauseBtn = document.querySelector('#pauseButton');
         const nextBtn = document.querySelector('#nextButton');
-        const audio =  document.querySelector('audio')
-        const likeBtn = document.querySelector('#like-button')
-        const songText = document.querySelector('#songText')
+        const audio =  document.querySelector('audio');
+        const likeBtn = document.querySelector('#like-button');
+        const songText = document.querySelector('#songText');
+        const voteBar = document.querySelector('#vote-bar');
 
         roomSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
@@ -82,11 +88,15 @@ $(document).ready(function(){
             if (msg.toLowerCase()==userConnectCommand || msg.toLowerCase()==userDisconnectCommand){
                 var avatars = new Array('/media/cat1.png', '/media/cat2.png', '/media/cat3.png');
 
-                connectedCount.innerHTML = data.users.length
+                connected = data.users.length
+                voteBar.style.width = ((voted/connected*100)+"%");
+                voteBar.innerHTML = ((voted/connected*100)+"%");
+
                 usersContainer.innerHTML=""
                 for (let i = 0; i < data.users.length; i += 1) {
-                    usersContainer.innerHTML+="<div class='user-container'>"+
-                    "<img class='user-image' src=" +avatars[getRandomInt(avatars.length)]+ ">" + "<b> " + data.users[i]+"</b></div>";
+                    usersContainer.innerHTML+='<div class="col-1 m-2" align="center"> <div class="row">'+
+                    '<img src="'+avatars[getRandomInt(avatars.length)]+'" style="height: 30pt; border-radius: 10%;">'+
+                    '</div> <div class="row"> <small><b>'+data.users[i]+'</b></small></div></div>';
                 }
 
                 console.log(data.users)
@@ -95,8 +105,9 @@ $(document).ready(function(){
             }
 
             if (msg.toLowerCase()==voteUpdateCommand){
-                votedCount.innerHTML = data.vote_count
-                console.log(data.vote_count)
+                voted = data.vote_count
+                voteBar.style.width = ((voted/connected*100)+"%");
+                voteBar.innerHTML = ((voted/connected*100)+"%");
             }
         };
 

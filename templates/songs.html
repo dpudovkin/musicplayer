@@ -6,6 +6,19 @@
 {% load bootstrap4 %}
 
 <div class="row mb-4">
+
+    {% if success %}
+
+    <div class="col-6">
+        <div class="row m-3" align="center">
+            <div class="p-3 mb-2 bg-success text-white"><h5>Аудиофайл успешно загружен!</h5>
+             Он будет опубликован сразу после прохождения модерации.</div>
+        </div>
+    </div>
+
+
+    {% else %}
+
     <div class="col-6">
         <div class="row">
             <div class="col">
@@ -28,12 +41,12 @@
 
                     <div class="form-group">
                         <label for="id_image">Обложка трека:</label>
-                        <input class="form-control" type="file" name="image" accept="image/*" required="" id="id_image">
+                        <input  type="file" name="image" accept="image/*" required="" id="id_image">
                     </div>
 
                     <div class="form-group">
                         <label for="id_audio_file">Аудио файл:</label>
-                        <input class="form-control"  type="file" name="audio_file" required="" accept="audio/*"
+                        <input type="file" name="audio_file" required="" accept="audio/*"
                         id="id_audio_file">
                     </div>
 
@@ -57,6 +70,9 @@
         </div>
         </div>
     </div>
+
+    {% endif %}
+
     <div class="col-6">
         <div class="row">
             <div class="col my-2">
@@ -73,8 +89,8 @@
                   <img src="{{ song.image.url }}"
                        style="width: 60px; border-radius: 10px;">
                 </div>
-                <div class="col-3 my-auto">
-                     <h3>{{ song.title }}</h3>
+                <div class="col-7 my-auto">
+                     <h3>{{ song.title }} <span class="badge badge-primary"> New</span></h3>
                     <h5 class="text-secondary">{{ song.artist }}</h5>
                 </div>
             </div>
@@ -90,22 +106,9 @@
         </div>
     </div>
 </div>
-    </div>
-</div>
 
-<!--        <form method="post" enctype="multipart/form-data" style="padding:16px;width: 100%;">-->
-<!--               {% csrf_token %}-->
-<!--                {% for field in song_form %}-->
-<!--                    <div class="fieldWrapper">-->
-<!--                        {{ field.errors }}-->
-<!--                        {{ field.label_tag }} {{ field }}-->
-<!--                        {% if field.help_text %}-->
-<!--                        <p class="help">{{ field.help_text|safe }}</p>-->
-<!--                        {% endif %}-->
-<!--                    </div>-->
-<!--                {% endfor %}-->
-<!--                <button class="btn btn-primary my-4" type="submit">Добавить трек</button>-->
-<!--        </form>-->
+
+    </div>
 </div>
 
 {% endblock content %}

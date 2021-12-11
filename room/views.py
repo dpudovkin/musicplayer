@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from chat.models import ChatMessage
 from chat.service import ChatMessageRepository
@@ -44,31 +45,41 @@ def room(request, room_name):
     return render(request, 'room.html', context)
 
 
-@login_required(login_url=('/accounts/login'))
+@login_required(login_url='/accounts/login')
 def index(request):
     context = {}
     return render(request, 'index.html', context)
 
 
 def to_room(request):
-    context = {}
     return redirect(f"/rooms/{request.POST.get('room_name')}")
 
 
+@login_required(login_url='/accounts/login')
 def add_song(request):
     if request.method == "POST":
         song_form = SongForm(request.POST, request.FILES)
         if song_form.is_valid():
-            song_form.save()
+            song = song_form.save()
+            song.uploader = request.user
+            song.save()
             messages.success(request, 'Your song was successfully added!')
-            return HttpResponseRedirect('/rooms/add/song/')
+            return HttpResponseRedirect(
+                reverse('room:add_song_success')
+            )
         else:
             messages.error(request, 'Error saving form')
-    song_form = SongForm()
-    songs = Song.objects.recently_added()
-    return render(request=request, template_name="songs.html", context={'song_form': song_form, 'songs': songs})
+    songs = Song.objects.applied_recently_added(verified=True)
+    return render(request=request, template_name="songs.html", context={'songs': songs, 'success': False})
 
 
+@login_required(login_url='/accounts/login')
+def add_song_success(request):
+    songs = Song.objects.applied_recently_added(verified=True)
+    return render(request=request, template_name="songs.html", context={'songs': songs, 'success': True})
+
+
+@login_required(login_url='/accounts/login')
 def liked_song(request):
     likes = Like.objects.liked_by_user(request.user.id)
     songs = []
